@@ -1,0 +1,14 @@
+<div class="max-w-5xl mx-auto p-6">
+  <h1 class="text-2xl font-semibold mb-4">Billing</h1>
+  <div class="bg-white border rounded p-4 mb-4">
+    <div class="text-sm text-gray-500">Current subscription</div>
+    <div class="text-lg font-medium">
+      <%= @current_subscription&.billing_plan&.name || '—' %>
+    </div>
+    <div class="text-sm text-gray-500">Next billing</div>
+    <div class="text-lg"><%= @next_billing_date || '—' %></div>
+  </div>
+  <div id="genera-payment-methods" class="mt-6">
+    <payment-methods />
+  </div>
+</div>

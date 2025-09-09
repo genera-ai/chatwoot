@@ -1,0 +1,26 @@
+<div class="max-w-5xl mx-auto p-6">
+  <h1 class="text-2xl font-semibold mb-4">Genera Atende Dashboard</h1>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="bg-white border rounded p-4">
+      <div class="text-sm text-gray-500">Conversations</div>
+      <div class="text-2xl font-bold"><%= @stats[:total_conversations] rescue '-' %></div>
+    </div>
+    <div class="bg-white border rounded p-4">
+      <div class="text-sm text-gray-500">Resolved Today</div>
+      <div class="text-2xl font-bold"><%= @stats[:resolved_today] rescue '-' %></div>
+    </div>
+    <div class="bg-white border rounded p-4">
+      <div class="text-sm text-gray-500">Active Agents</div>
+      <div class="text-2xl font-bold"><%= @stats[:active_agents] rescue '-' %></div>
+    </div>
+  </div>
+  <h2 class="text-xl font-semibold mb-2">Quick Actions</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <% (@quick_actions || []).each do |qa| %>
+      <a href="<%= qa[:path] %>" class="block bg-white border rounded p-4 hover:bg-gray-50">
+        <div class="text-sm text-gray-500"><%= qa[:description] %></div>
+        <div class="text-lg font-medium"><%= qa[:title] %></div>
+      </a>
+    <% end %>
+  </div>
+</div>
