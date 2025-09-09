@@ -6,5 +6,27 @@
       "EMPTY_STATE": "No results found"
     },
     "CLOSE": "Close"
+  },
+  "GENERA_ATENDE": {
+    "NAV": {
+      "DASHBOARD": "Dashboard",
+      "BILLING": "Billing",
+      "SETTINGS": "Settings",
+      "WORKSPACES": "Workspaces",
+      "UPGRADE_PLAN": "Upgrade Plan",
+      "VIEW_INVOICES": "View Invoices",
+      "PAYMENT_METHODS": "Payment Methods"
+    },
+    "BILLING": {
+      "OVERVIEW": "Billing Overview",
+      "CURRENT_PLAN": "Current Plan",
+      "NEXT_BILLING": "Next billing: {date}",
+      "MESSAGES_THIS_MONTH": "Messages This Month",
+      "OF_INCLUDED": "of {count} included",
+      "ACTIVE_AGENTS": "Active Agents",
+      "STORAGE_USED": "Storage Used",
+      "GB": "GB",
+      "PRICE_PER_MONTH": "${price}/mo"
+    }
   }
 }
