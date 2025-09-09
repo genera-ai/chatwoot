@@ -95,3 +95,6 @@ unless Rails.env.production?
 
   CannedResponse.create!(account: account, short_code: 'start', content: 'Hello welcome to chatwoot.')
 end
+
+# Load Genera Atende SaaS seeds
+load Rails.root.join('db', 'seeds', 'genera_atende.rb')

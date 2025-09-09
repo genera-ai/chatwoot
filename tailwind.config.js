@@ -30,10 +30,12 @@ const tailwindConfig = {
     './app/javascript/shared/**/*.vue',
     './app/javascript/survey/**/*.vue',
     './app/javascript/dashboard/components-next/**/*.vue',
+    './app/javascript/dashboard/components-genera/**/*.vue',
     './app/javascript/dashboard/helper/**/*.js',
     './app/javascript/dashboard/components-next/**/*.js',
     './app/javascript/dashboard/routes/dashboard/**/**/*.js',
     './app/views/**/*.html.erb',
+    './app/views/genera/**/*.html.erb',
   ],
   theme: {
     extend: {
@@ -197,6 +199,13 @@ const tailwindConfig = {
       'modal-backdrop-light': 'rgba(0, 0, 0, 0.4)',
       'modal-backdrop-dark': 'rgba(0, 0, 0, 0.6)',
       current: 'currentColor',
+      // Genera Atende Brand Colors
+      'genera-primary': '#3B82F6',
+      'genera-secondary': '#1E40AF',
+      'genera-accent': '#60A5FA',
+      'genera-success': '#10B981',
+      'genera-warning': '#F59E0B',
+      'genera-error': '#EF4444',
       ...colors,
       body: slateDark.slate7,
     },

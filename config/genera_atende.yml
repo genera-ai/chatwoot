@@ -1,0 +1,77 @@
+# Genera Atende SaaS Configuration
+genera_atende:
+  # Branding Configuration
+  branding:
+    company_name: "Genera Atende"
+    logo_url: "/genera-logo.png"
+    primary_color: "#3B82F6"
+    secondary_color: "#1E40AF"
+    accent_color: "#60A5FA"
+    
+  # Feature Flags
+  features:
+    billing_enabled: true
+    multitenancy_enabled: true
+    custom_domain_enabled: true
+    analytics_enabled: true
+    api_access_enabled: true
+    sso_enabled: false
+    
+  # Billing Configuration
+  billing:
+    currency: "USD"
+    trial_days: 14
+    grace_period_days: 3
+    auto_renewal: true
+    
+  # Multitenancy Configuration
+  multitenancy:
+    default_tenant_domain: "genera-atende.com"
+    allow_custom_domains: true
+    max_workspaces_per_tenant: 10
+    
+  # Security Configuration
+  security:
+    require_2fa_for_admins: false
+    session_timeout: 24 # hours
+    max_login_attempts: 5
+    
+  # Integration Configuration
+  integrations:
+    stripe:
+      enabled: true
+      publishable_key: "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>"
+      secret_key: "<%= ENV['STRIPE_SECRET_KEY'] %>"
+      webhook_secret: "<%= ENV['STRIPE_WEBHOOK_SECRET'] %>"
+    
+    email:
+      provider: "smtp"
+      from_address: "noreply@genera-atende.com"
+      
+  # Analytics Configuration
+  analytics:
+    enabled: true
+    provider: "internal" # or "google_analytics", "mixpanel", etc.
+    tracking_id: "<%= ENV['ANALYTICS_TRACKING_ID'] %>"
+    
+  # Notification Configuration
+  notifications:
+    email:
+      enabled: true
+      templates_path: "genera_atende/mailers"
+    
+    webhook:
+      enabled: true
+      timeout: 30 # seconds
+      
+  # Development Configuration
+  development:
+    debug_mode: true
+    log_level: "debug"
+    mock_payments: true
+    
+  # Production Configuration
+  production:
+    debug_mode: false
+    log_level: "info"
+    mock_payments: false

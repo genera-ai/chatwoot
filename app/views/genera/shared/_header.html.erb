@@ -1,0 +1,59 @@
+<header class="genera-header bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <%= link_to genera_dashboard_path, class: "flex items-center" do %>
+          <div class="w-8 h-8 bg-genera-primary rounded-lg flex items-center justify-center mr-3">
+            <span class="text-white text-sm font-bold">G</span>
+          </div>
+          <span class="text-xl font-bold text-gray-900">Genera Atende</span>
+        <% end %>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="hidden md:flex space-x-8">
+        <%= link_to "Dashboard", genera_dashboard_path, 
+            class: "text-gray-700 hover:text-genera-primary px-3 py-2 text-sm font-medium #{'text-genera-primary' if current_page?(genera_dashboard_path)}" %>
+        <%= link_to "Billing", genera_billing_path, 
+            class: "text-gray-700 hover:text-genera-primary px-3 py-2 text-sm font-medium #{'text-genera-primary' if current_page?(genera_billing_path)}" %>
+        <%= link_to "Settings", genera_settings_path, 
+            class: "text-gray-700 hover:text-genera-primary px-3 py-2 text-sm font-medium #{'text-genera-primary' if current_page?(genera_settings_path)}" %>
+      </nav>
+      
+      <!-- User Menu -->
+      <div class="flex items-center space-x-4">
+        <!-- Workspace Selector -->
+        <div class="hidden lg:block">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-genera-primary rounded-lg flex items-center justify-center">
+              <span class="text-white text-sm font-semibold">W</span>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-900">My Workspace</p>
+              <p class="text-xs text-gray-500">Professional</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Upgrade Button -->
+        <button class="bg-genera-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-genera-primary/90">
+          Upgrade Plan
+        </button>
+        
+        <!-- User Avatar -->
+        <div class="relative">
+          <button class="flex items-center space-x-2 text-sm text-gray-700 hover:text-gray-900">
+            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <span class="text-sm font-medium text-gray-600">U</span>
+            </div>
+            <span class="hidden md:block">User</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: genera_atende_postgres
+    environment:
+      POSTGRES_DB: chatwoot_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - genera_atende_network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: genera_atende_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - genera_atende_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  genera_atende_network:
+    driver: bridge

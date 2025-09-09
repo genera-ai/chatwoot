@@ -161,6 +161,20 @@ class User < ApplicationRecord
   def remove_macros
     macros.personal.destroy_all
   end
+
+  # Genera Atende SaaS methods
+  def current_workspace
+    @current_workspace ||= genera_atende_workspaces.first
+  end
+
+  def genera_atende_workspaces
+    GeneraAtende::Workspace.joins(:workspace_users)
+                          .where(genera_atende_workspace_users: { user: self })
+  end
+
+  def genera_atende_tenant
+    current_workspace&.tenant
+  end
 end
 
 User.include_mod_with('Audit::User')

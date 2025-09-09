@@ -590,6 +590,31 @@ Rails.application.routes.draw do
   get '/swagger', to: 'swagger#respond'
 
   # ----------------------------------------------------------------------
+  # Genera Atende SaaS Routes
+  namespace :genera_atende do
+    # Dashboard
+    get 'dashboard', to: 'dashboard#index', as: 'dashboard'
+    
+    # Billing
+    get 'billing', to: 'billing#index', as: 'billing'
+    get 'billing/:id', to: 'billing#show', as: 'billing_show'
+    patch 'billing/update_plan', to: 'billing#update_plan', as: 'billing_update_plan'
+    delete 'billing/cancel_subscription', to: 'billing#cancel_subscription', as: 'billing_cancel_subscription'
+    get 'billing/payment_methods', to: 'billing#payment_methods', as: 'billing_payment_methods'
+    post 'billing/add_payment_method', to: 'billing#add_payment_method', as: 'billing_add_payment_method'
+    delete 'billing/remove_payment_method/:id', to: 'billing#remove_payment_method', as: 'billing_remove_payment_method'
+    
+    # Tenant Settings
+    get 'settings', to: 'tenant#settings', as: 'settings'
+    patch 'settings', to: 'tenant#update_settings', as: 'update_settings'
+    get 'branding', to: 'tenant#branding', as: 'branding'
+    patch 'branding', to: 'tenant#update_branding', as: 'update_branding'
+    get 'security', to: 'tenant#security', as: 'security'
+    post 'security/enable_2fa', to: 'tenant#enable_2fa', as: 'enable_2fa'
+    get 'security/api_keys', to: 'tenant#manage_api_keys', as: 'manage_api_keys'
+  end
+
+  # ----------------------------------------------------------------------
   # Routes for testing
   resources :widget_tests, only: [:index] unless Rails.env.production?
 end

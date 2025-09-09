@@ -3,6 +3,35 @@
 
 ___
 
+# Genera Atende (fork do Chatwoot)
+
+Camada SaaS e customizações do Genera Atende sobre o Chatwoot.
+
+## Desenvolvimento rápido
+
+Siga o guia completo em `EXECUTE_SETUP.md`.
+
+Atalhos:
+```bash
+./bin/docker_dev.sh start
+./bin/setup_genera_atende
+pnpm dev
+```
+
+App: http://localhost:3000
+Dashboard: http://localhost:3000/genera_atende/dashboard
+
+Credenciais de desenvolvimento (seeds):
+- Usuário: john@acme.inc
+- Senha: Password1!
+
+## Notas
+- Postgres com pgvector: `docker-compose.dev.yml`
+- Variáveis: `.env.development` → `.env`
+- Lint/Test: ver `.cursor/rules/development-guidelines.mdc`
+
+___
+
 # Chatwoot
 
 The modern customer support platform, an open-source alternative to Intercom, Zendesk, Salesforce Service Cloud etc.
