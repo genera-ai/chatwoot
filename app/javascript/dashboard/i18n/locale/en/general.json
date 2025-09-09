@@ -27,6 +27,17 @@
       "STORAGE_USED": "Storage Used",
       "GB": "GB",
       "PRICE_PER_MONTH": "${price}/mo"
+    },
+    "PAYMENT": {
+      "ADD_METHOD": "Add Payment Method",
+      "EXPIRES": "Expires {month}/{year}",
+      "DEFAULT": "Default",
+      "SET_DEFAULT": "Set as Default",
+      "REMOVE": "Remove",
+      "EMPTY_TITLE": "No payment methods",
+      "EMPTY_DESC": "Get started by adding a payment method.",
+      "INTEGRATION_PLACEHOLDER": "Payment method integration will be implemented here.",
+      "CONFIRM_REMOVE": "Are you sure you want to remove this payment method?"
     }
   }
 }
