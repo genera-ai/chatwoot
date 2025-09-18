@@ -52,7 +52,8 @@
           </div>
           <div class="p-6">
             <div class="space-y-6">
-              <% @plan_stats[:usage].reject { |k, _| k == :llm_credits }.each do |resource, stats| %>
+              <% if @plan_stats[:usage]&.is_a?(Hash) %>
+                <% @plan_stats[:usage].reject { |k, _| k == :llm_credits }.each do |resource, stats| %>
                 <div class="bg-[rgb(var(--slate-2))] dark:bg-[rgb(var(--slate-3))] rounded-lg p-4">
                   <div class="flex items-center justify-between mb-3">
                     <h5 class="text-base font-semibold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
@@ -72,6 +73,7 @@
                     <span><%= stats[:limit] == -1 ? 'Ilimitado' : stats[:limit] %></span>
                   </div>
                 </div>
+                <% end %>
               <% end %>
             </div>
           </div>
@@ -87,7 +89,7 @@
           </div>
           <div class="p-6">
             <% if @plan_stats.dig(:usage, :llm_credits) %>
-              <% llm_stats = @plan_stats[:usage][:llm_credits] %>
+              <% llm_stats = @plan_stats.dig(:usage, :llm_credits) %>
               
               <div class="text-center mb-6">
                 <div class="text-4xl font-bold text-[rgb(var(--iris-9))] mb-2">

@@ -76,7 +76,7 @@ class BillingPlanService
       Rails.logger.info "Account #{@account.id} upgraded from #{old_plan} to #{new_plan_name}"
 
       # Atualizar configurações adicionais se fornecidas
-      billing_plan.update!(options) if options.any?
+      billing_plan.update!(options.to_h) if options.present?
     end
 
     success
@@ -168,35 +168,64 @@ class BillingPlanService
 
   # Obter estatísticas do plano
   def plan_stats
-    return {} unless billing_plan
-
-    {
-      plan_name: billing_plan.plan_name,
-      plan_details: billing_plan.plan_details,
-      usage: {
-        agents: {
-          current: current_usage(:agents),
-          limit: resource_limit(:agents),
-          percentage: usage_percentage(:agents)
-        },
-        inboxes: {
-          current: current_usage(:inboxes),
-          limit: resource_limit(:inboxes),
-          percentage: usage_percentage(:inboxes)
-        },
-        conversations_per_month: {
-          current: current_usage(:conversations_per_month),
-          limit: resource_limit(:conversations_per_month),
-          percentage: usage_percentage(:conversations_per_month)
-        },
-        llm_credits: {
-          current: current_llm_credits_used,
-          limit: llm_credits_limit,
-          percentage: llm_credits_usage_percentage,
-          purchased: llm_credits_purchased
+    if billing_plan
+      {
+        plan_name: billing_plan.plan_name,
+        plan_details: billing_plan.plan_details,
+        usage: {
+          agents: {
+            current: current_usage(:agents),
+            limit: resource_limit(:agents),
+            percentage: usage_percentage(:agents)
+          },
+          inboxes: {
+            current: current_usage(:inboxes),
+            limit: resource_limit(:inboxes),
+            percentage: usage_percentage(:inboxes)
+          },
+          conversations_per_month: {
+            current: current_usage(:conversations_per_month),
+            limit: resource_limit(:conversations_per_month),
+            percentage: usage_percentage(:conversations_per_month)
+          },
+          llm_credits: {
+            current: current_llm_credits_used,
+            limit: llm_credits_limit,
+            percentage: llm_credits_usage_percentage,
+            purchased: llm_credits_purchased
+          }
         }
       }
-    }
+    else
+      # Retornar estrutura padrão quando não há billing plan
+      {
+        plan_name: 'free',
+        plan_details: AccountBillingPlan::PLANS['free'],
+        usage: {
+          agents: {
+            current: 0,
+            limit: 3,
+            percentage: 0
+          },
+          inboxes: {
+            current: 0,
+            limit: 2,
+            percentage: 0
+          },
+          conversations_per_month: {
+            current: 0,
+            limit: 100,
+            percentage: 0
+          },
+          llm_credits: {
+            current: 0,
+            limit: 1000,
+            percentage: 0,
+            purchased: 0
+          }
+        }
+      }
+    end
   end
 
   # Métodos para gerenciar créditos LLM
