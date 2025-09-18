@@ -15,6 +15,11 @@
     <%= form_with url: super_admin_billing_plan_configuration_path(@plan_name), method: :put, local: true do |f| %>
       <div class="space-y-6 bg-white dark:bg-[rgb(var(--slate-3))] p-6 rounded-lg border">
         <div>
+          <label class="block text-sm font-medium mb-1">Nome do Plano</label>
+          <input type="text" name="billing_plan_configuration[name]" class="w-full border rounded px-3 py-2" value="<%= @override[:name] || @plan_details[:name] %>">
+        </div>
+
+        <div>
           <label class="block text-sm font-medium mb-1">Preço (R$)</label>
           <input type="number" name="billing_plan_configuration[price]" class="w-full border rounded px-3 py-2" value="<%= @override[:price] || @plan_details[:price] %>">
         </div>

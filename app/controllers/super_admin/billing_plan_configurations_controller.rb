@@ -118,6 +118,7 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
     base = (AccountBillingPlan::PLANS[plan_name] || {}).deep_dup
     ov = current_overrides[plan_name] || {}
     base[:price] = ov[:price] if ov.key?(:price)
+    base[:name] = ov[:name] if ov[:name].present?
     if ov[:limits].is_a?(Hash)
       base[:limits] ||= {}
       base[:limits].merge!(ov[:limits].symbolize_keys)
@@ -128,6 +129,7 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
 
   def plan_config_params
     params.require(:billing_plan_configuration).permit(
+      :name,
       :price,
       :features,
       limits: %i[agents inboxes conversations_per_month contacts storage_mb llm_credits]
