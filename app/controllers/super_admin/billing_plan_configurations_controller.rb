@@ -68,16 +68,18 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
 
     overrides = current_overrides
 
-    # Normaliza parâmetros
-    sanitized = plan_config_params
-    sanitized[:features] = sanitized[:features].to_s.split(',').map { |f| f.strip }.reject(&:blank?) if sanitized[:features].present?
-    if sanitized[:limits].present?
-      sanitized[:limits] = sanitized[:limits].to_h.transform_values { |v| v.to_s.strip.presence }.compact
-      sanitized[:limits].transform_values! { |v| v == '-1' ? -1 : v.to_i }
+    # Normaliza parâmetros (como Hash) para evitar UnfilteredParameters
+    sanitized = plan_config_params.to_h
+    sanitized['features'] = sanitized['features'].to_s.split(',').map(&:strip).reject(&:blank?) if sanitized['features'].present?
+    if sanitized['limits'].present?
+      sanitized['limits'] = sanitized['limits'].transform_values { |v| v.to_s.strip.presence }.compact
+      sanitized['limits'].transform_values! { |v| v == '-1' ? -1 : v.to_i }
     end
-    sanitized[:price] = sanitized[:price].to_s.strip.presence&.to_i if sanitized.key?(:price)
+    sanitized['price'] = sanitized['price'].to_s.strip.presence&.to_i if sanitized.key?('price')
 
-    overrides[@plan_name] = (overrides[@plan_name] || {}).merge(sanitized)
+    # Garante estrutura e realiza merge seguro
+    plan_override = (overrides[@plan_name] || {})
+    overrides[@plan_name] = plan_override.merge(sanitized)
 
     record = InstallationConfig.where(name: 'BILLING_PLANS_OVERRIDES').first_or_create(value: {}, locked: false)
     record.update!(value: overrides, locked: false)
