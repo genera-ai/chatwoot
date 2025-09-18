@@ -1,6 +1,6 @@
 module SuperAdmin::NavigationHelper
   def settings_open?
-    params[:controller].in? %w[super_admin/settings super_admin/app_configs]
+    params[:controller].in? %w[super_admin/settings super_admin/app_configs super_admin/billing_plan_configurations]
   end
 
   def settings_pages
@@ -11,6 +11,9 @@ module SuperAdmin::NavigationHelper
     # Add general at the beginning
     general_feature = [['general', { 'config_key' => 'general', 'name' => 'General' }]]
 
-    general_feature + features.to_a
+    # Add billing plan configurations
+    billing_plans_feature = [['billing_plan_configurations', { 'config_key' => 'billing_plan_configurations', 'name' => 'Configuração de Planos' }]]
+
+    general_feature + billing_plans_feature + features.to_a
   end
 end

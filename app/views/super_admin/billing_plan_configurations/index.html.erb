@@ -1,0 +1,179 @@
+<% content_for(:title) { "Configuração de Planos" } %>
+
+<div class="min-h-screen bg-[rgb(var(--slate-2))] dark:bg-[rgb(var(--slate-1))] p-4 sm:p-6 lg:p-8 font-sans">
+  <div class="max-w-screen-2xl mx-auto">
+    
+    <header class="mb-8">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 class="text-4xl font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+            Configuração de Planos
+          </h1>
+          <p class="mt-3 text-lg text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">
+            Gerencie os planos de billing disponíveis no sistema
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= link_to super_admin_settings_path, class: "inline-flex items-center justify-center px-5 py-3 border border-[rgb(var(--border-strong))] rounded-lg text-base font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))] bg-white dark:bg-[rgb(var(--slate-4))] hover:bg-[rgb(var(--slate-3))] hover:text-[rgb(var(--slate-12))] dark:hover:bg-[rgb(var(--slate-5))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--iris-8))] transition-colors" do %>
+            <i class="ri-arrow-left-line mr-2 -ml-1 text-xl"></i>
+            Voltar para Settings
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <!-- Estatísticas Gerais -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-[rgb(var(--solid-1))] dark:bg-[rgb(var(--solid-2))] rounded-xl shadow-md border border-[rgb(var(--border-container))] dark:border-[rgb(var(--border-strong))] p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-[rgb(var(--iris-2))] dark:bg-[rgb(var(--iris-3))] rounded-lg flex items-center justify-center">
+              <i class="ri-building-4-line text-2xl text-[rgb(var(--iris-9))]"></i>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-sm font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Total de Contas</h3>
+            <p class="text-2xl font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+              <%= Account.joins(:billing_plan).count %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[rgb(var(--solid-1))] dark:bg-[rgb(var(--solid-2))] rounded-xl shadow-md border border-[rgb(var(--border-container))] dark:border-[rgb(var(--border-strong))] p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-[rgb(var(--teal-2))] dark:bg-[rgb(var(--teal-3))] rounded-lg flex items-center justify-center">
+              <i class="ri-user-line text-2xl text-[rgb(var(--teal-9))]"></i>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-sm font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Total de Agentes</h3>
+            <p class="text-2xl font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+              <%= User.count %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[rgb(var(--solid-1))] dark:bg-[rgb(var(--solid-2))] rounded-xl shadow-md border border-[rgb(var(--border-container))] dark:border-[rgb(var(--border-strong))] p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-[rgb(var(--orange-2))] dark:bg-[rgb(var(--orange-3))] rounded-lg flex items-center justify-center">
+              <i class="ri-mail-line text-2xl text-[rgb(var(--orange-9))]"></i>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-sm font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Total de Inboxes</h3>
+            <p class="text-2xl font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+              <%= Inbox.count %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Planos -->
+    <div class="bg-[rgb(var(--solid-1))] dark:bg-[rgb(var(--solid-2))] rounded-xl shadow-md border border-[rgb(var(--border-container))] dark:border-[rgb(var(--border-strong))] overflow-hidden">
+      <div class="px-6 py-5 border-b border-[rgb(var(--border-container))] dark:border-[rgb(var(--border-strong))] bg-[rgb(var(--slate-2))] dark:bg-[rgb(var(--slate-3))]">
+        <h3 class="text-xl font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))] flex items-center">
+          <i class="ri-settings-3-line mr-3 text-[rgb(var(--iris-9))] text-2xl"></i>
+          Planos Disponíveis
+        </h3>
+      </div>
+      
+      <div class="p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <% @plans.each do |plan_key, plan_details| %>
+            <% stats = @plan_stats[plan_key] || { accounts_count: 0, total_agents: 0, total_inboxes: 0 } %>
+            <div class="group relative bg-[rgb(var(--solid-1))] dark:bg-[rgb(var(--solid-2))] border-2 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[rgb(var(--iris-7))] border-[rgb(var(--border-strong))] dark:border-[rgb(var(--border-strong))]">
+              
+              <!-- Header do Plano -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-[rgb(var(--iris-2))] dark:bg-[rgb(var(--iris-3))] rounded-lg flex items-center justify-center">
+                    <i class="ri-<%= plan_key == 'free' ? 'gift' : plan_key == 'starter' ? 'rocket' : plan_key == 'professional' ? 'star' : 'crown' %>-line text-xl text-[rgb(var(--iris-9))]"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-lg font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+                      <%= plan_details[:name] %>
+                    </h4>
+                    <p class="text-sm text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">
+                      R$ <%= plan_details[:price] %>/mês
+                    </p>
+                  </div>
+                </div>
+                
+                <!-- Badge de Status -->
+                <span class="px-3 py-1 rounded-full text-xs font-bold <%= plan_key == 'free' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' %>">
+                  <%= plan_key == 'free' ? 'Gratuito' : 'Premium' %>
+                </span>
+              </div>
+
+              <!-- Estatísticas de Uso -->
+              <div class="mb-4 p-4 bg-[rgb(var(--slate-2))] dark:bg-[rgb(var(--slate-3))] rounded-lg">
+                <h5 class="text-sm font-semibold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))] mb-2">Uso Atual</h5>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div class="text-lg font-bold text-[rgb(var(--iris-9))]"><%= stats[:accounts_count] %></div>
+                    <div class="text-xs text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Contas</div>
+                  </div>
+                  <div>
+                    <div class="text-lg font-bold text-[rgb(var(--teal-9))]"><%= stats[:total_agents] %></div>
+                    <div class="text-xs text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Agentes</div>
+                  </div>
+                  <div>
+                    <div class="text-lg font-bold text-[rgb(var(--orange-9))]"><%= stats[:total_inboxes] %></div>
+                    <div class="text-xs text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]">Inboxes</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Limites do Plano -->
+              <div class="mb-4">
+                <h5 class="text-sm font-semibold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))] mb-2">Limites</h5>
+                <div class="space-y-1">
+                  <% plan_details[:limits].each do |limit_key, limit_value| %>
+                    <div class="flex justify-between items-center text-sm">
+                      <span class="text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))]"><%= limit_key.to_s.humanize %>:</span>
+                      <span class="font-bold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))]">
+                        <%= limit_value == -1 ? 'Ilimitado' : number_with_delimiter(limit_value) %>
+                      </span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Features do Plano -->
+              <div class="mb-6">
+                <h5 class="text-sm font-semibold text-[rgb(var(--slate-12))] dark:text-[rgb(var(--slate-12))] mb-2">Recursos</h5>
+                <div class="flex flex-wrap gap-1">
+                  <% plan_details[:features].each do |feature| %>
+                    <span class="px-2 py-1 bg-[rgb(var(--iris-2))] dark:bg-[rgb(var(--iris-3))] text-[rgb(var(--iris-9))] rounded-full text-xs font-medium">
+                      <%= feature.humanize %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Ações -->
+              <div class="flex space-x-2">
+                <%= link_to super_admin_billing_plan_configuration_path(plan_key), 
+                    class: "flex-1 inline-flex items-center justify-center px-4 py-2 border border-[rgb(var(--border-strong))] rounded-lg text-sm font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))] bg-white dark:bg-[rgb(var(--slate-4))] hover:bg-[rgb(var(--slate-3))] hover:text-[rgb(var(--slate-12))] dark:hover:bg-[rgb(var(--slate-5))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--iris-8))] transition-colors" do %>
+                  <i class="ri-eye-line mr-2"></i>
+                  Ver Detalhes
+                <% end %>
+                
+                <%= link_to edit_super_admin_billing_plan_configuration_path(plan_key), 
+                    class: "flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-[rgb(var(--iris-9))] hover:bg-[rgb(var(--iris-10))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--iris-8))] transition-colors" do %>
+                  <i class="ri-edit-line mr-2"></i>
+                  Editar
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

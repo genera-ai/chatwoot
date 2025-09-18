@@ -592,6 +592,7 @@ Rails.application.routes.draw do
       end
       resources :platform_apps, only: [:index, :new, :create, :show, :edit, :update, :destroy]
       resources :billing_plans, only: [:index, :show, :edit, :update]
+      resources :billing_plan_configurations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
       resource :instance_status, only: [:show]
 
       resource :settings, only: [:show] do
