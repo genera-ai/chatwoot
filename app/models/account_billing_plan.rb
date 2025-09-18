@@ -3,7 +3,7 @@
 # Table name: account_billing_plans
 #
 #  id                          :bigint           not null, primary key
-#  active                      :boolean          default(TRUE)
+#  active                      :boolean          default(TRUE), not null
 #  current_agents_count        :integer          default(0)
 #  current_conversations_count :integer          default(0)
 #  current_inboxes_count       :integer          default(0)
@@ -30,7 +30,6 @@
 #
 #  fk_rails_...  (account_id => accounts.id)
 #
-# Modelo para gerenciar planos de billing por conta (SaaS)
 class AccountBillingPlan < ApplicationRecord
   belongs_to :account
 
