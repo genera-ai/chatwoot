@@ -108,6 +108,7 @@ class Account < ApplicationRecord
 
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
+  after_create_commit :create_default_billing_plan
   after_destroy :remove_account_sequences
 
   def agents
@@ -163,6 +164,16 @@ class Account < ApplicationRecord
 
   def notify_creation
     Rails.configuration.dispatcher.dispatch(ACCOUNT_CREATED, Time.zone.now, account: self)
+  end
+
+  def create_default_billing_plan
+    return if billing_plan.present?
+
+    create_billing_plan!(
+      plan_name: 'free',
+      active: true,
+      payment_status: 'active'
+    )
   end
 
   trigger.after(:insert).for_each(:row) do
