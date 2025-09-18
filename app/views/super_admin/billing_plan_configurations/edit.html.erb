@@ -1,2 +1,49 @@
-<h1>SuperAdmin::BillingPlanConfigurations#edit</h1>
-<p>Find me in app/views/super_admin/billing_plan_configurations/edit.html.erb</p>
+<% content_for(:title) { "Editar Plano - #{@plan_details[:name]}" } %>
+
+<div class="min-h-screen bg-[rgb(var(--slate-2))] dark:bg-[rgb(var(--slate-1))] p-4 sm:p-6 lg:p-8 font-sans">
+  <div class="max-w-4xl mx-auto">
+    <header class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-[rgb(var(--slate-12))]">Editar Plano: <%= @plan_details[:name] %></h1>
+        <p class="text-[rgb(var(--slate-11))]">Apenas overrides são salvos. O plano base permanece no código.</p>
+      </div>
+      <%= link_to super_admin_billing_plan_configuration_path(@plan_name), class: "text-sm px-3 py-2 rounded border" do %>
+        Voltar
+      <% end %>
+    </header>
+
+    <%= form_with url: super_admin_billing_plan_configuration_path(@plan_name), method: :put, local: true do |f| %>
+      <div class="space-y-6 bg-white dark:bg-[rgb(var(--slate-3))] p-6 rounded-lg border">
+        <div>
+          <label class="block text-sm font-medium mb-1">Preço (R$)</label>
+          <input type="number" name="billing_plan_configuration[price]" class="w-full border rounded px-3 py-2" value="<%= @override[:price] || @plan_details[:price] %>">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Features (separadas por vírgula)</label>
+          <input type="text" name="billing_plan_configuration[features]" class="w-full border rounded px-3 py-2" value="<%= (@override[:features] || @plan_details[:features]).join(', ') %>">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2">Limites</label>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <% [:agents, :inboxes, :conversations_per_month, :contacts, :storage_mb, :llm_credits].each do |limit_key| %>
+              <% current_value = (@override.dig(:limits, limit_key) || @plan_details.dig(:limits, limit_key)) %>
+              <div>
+                <label class="block text-xs font-medium mb-1"><%= limit_key.to_s.humanize %></label>
+                <input type="number" name="billing_plan_configuration[limits][<%= limit_key %>]" class="w-full border rounded px-3 py-2" value="<%= current_value %>">
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button type="submit" class="px-4 py-2 rounded bg-[rgb(var(--iris-9))] text-white">Salvar</button>
+          <%= link_to super_admin_billing_plan_configuration_path(@plan_name), class: "px-4 py-2 rounded border" do %>
+            Cancelar
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

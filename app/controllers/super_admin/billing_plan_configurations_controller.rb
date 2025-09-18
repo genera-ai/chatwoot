@@ -2,7 +2,7 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
   before_action :set_plan, only: [:show, :edit, :update, :destroy]
 
   def index
-    @plans = AccountBillingPlan::PLANS
+    @plans = AccountBillingPlan::PLANS.keys.index_with { |k| merged_plan_details(k) }
     @plan_stats = {}
 
     # Estatísticas de uso por plano
@@ -17,7 +17,7 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
 
   def show
     @plan_name = params[:id]
-    @plan_details = AccountBillingPlan::PLANS[@plan_name]
+    @plan_details = merged_plan_details(@plan_name)
 
     unless @plan_details
       redirect_to super_admin_billing_plan_configurations_path, alert: 'Plano não encontrado'
@@ -34,7 +34,8 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
 
   def edit
     @plan_name = params[:id]
-    @plan_details = AccountBillingPlan::PLANS[@plan_name]
+    @plan_details = merged_plan_details(@plan_name)
+    @override = current_overrides[@plan_name] || {}
 
     return if @plan_details
 
@@ -58,15 +59,29 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
 
   def update
     @plan_name = params[:id]
-    @plan_details = AccountBillingPlan::PLANS[@plan_name]
+    @plan_details = merged_plan_details(@plan_name)
 
     unless @plan_details
       redirect_to super_admin_billing_plan_configurations_path, alert: 'Plano não encontrado'
       return
     end
 
-    # Atualizar configurações do plano (se necessário)
-    # Por enquanto, apenas redirecionamos
+    overrides = current_overrides
+
+    # Normaliza parâmetros
+    sanitized = plan_config_params
+    sanitized[:features] = sanitized[:features].to_s.split(',').map { |f| f.strip }.reject(&:blank?) if sanitized[:features].present?
+    if sanitized[:limits].present?
+      sanitized[:limits] = sanitized[:limits].to_h.transform_values { |v| v.to_s.strip.presence }.compact
+      sanitized[:limits].transform_values! { |v| v == '-1' ? -1 : v.to_i }
+    end
+    sanitized[:price] = sanitized[:price].to_s.strip.presence&.to_i if sanitized.key?(:price)
+
+    overrides[@plan_name] = (overrides[@plan_name] || {}).merge(sanitized)
+
+    record = InstallationConfig.where(name: 'BILLING_PLANS_OVERRIDES').first_or_create(value: {}, locked: false)
+    record.update!(value: overrides, locked: false)
+
     redirect_to super_admin_billing_plan_configuration_path(@plan_name), notice: 'Configurações do plano atualizadas com sucesso!'
   end
 
@@ -91,5 +106,31 @@ class SuperAdmin::BillingPlanConfigurationsController < SuperAdmin::ApplicationC
   def set_plan
     @plan_name = params[:id]
     @plan_details = AccountBillingPlan::PLANS[@plan_name]
+  end
+
+  def current_overrides
+    GlobalConfig.get('BILLING_PLANS_OVERRIDES')['BILLING_PLANS_OVERRIDES'] || {}
+  rescue StandardError
+    {}
+  end
+
+  def merged_plan_details(plan_name)
+    base = (AccountBillingPlan::PLANS[plan_name] || {}).deep_dup
+    ov = current_overrides[plan_name] || {}
+    base[:price] = ov[:price] if ov.key?(:price)
+    if ov[:limits].is_a?(Hash)
+      base[:limits] ||= {}
+      base[:limits].merge!(ov[:limits].symbolize_keys)
+    end
+    base[:features] = ov[:features] if ov[:features].present?
+    base
+  end
+
+  def plan_config_params
+    params.require(:billing_plan_configuration).permit(
+      :price,
+      :features,
+      limits: %i[agents inboxes conversations_per_month contacts storage_mb llm_credits]
+    )
   end
 end
