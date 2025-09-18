@@ -76,7 +76,7 @@ class BillingPlanService
       Rails.logger.info "Account #{@account.id} upgraded from #{old_plan} to #{new_plan_name}"
 
       # Atualizar configurações adicionais se fornecidas
-      billing_plan.update!(options) if options.any?
+      billing_plan.update!(options.to_h) if options.present?
     end
 
     success
