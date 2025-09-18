@@ -12,7 +12,7 @@ module SuperAdmin::NavigationHelper
     general_feature = [['general', { 'config_key' => 'general', 'name' => 'General' }]]
 
     # Add billing plan configurations
-    billing_plans_feature = [['billing_plan_configurations', { 'config_key' => 'billing_plan_configurations', 'name' => 'Configuração de Planos' }]]
+    billing_plans_feature = [['billing_plan_configurations', { 'config_key' => 'billing_plan_configurations', 'name' => 'Planos de Pagamento' }]]
 
     general_feature + billing_plans_feature + features.to_a
   end
