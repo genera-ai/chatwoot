@@ -60,6 +60,6 @@ class SuperAdmin::BillingPlansController < SuperAdmin::ApplicationController
   end
 
   def plan_params
-    params.require(:billing_plan).permit(:plan_name, :trial_ends_at, :stripe_customer_id, :stripe_subscription_id, :payment_status)
+    params.require(:account_billing_plan).permit(:plan_name, :trial_ends_at, :stripe_customer_id, :stripe_subscription_id, :payment_status)
   end
 end
