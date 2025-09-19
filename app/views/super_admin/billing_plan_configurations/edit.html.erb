@@ -20,6 +20,12 @@
         </div>
 
         <div>
+          <label class="block text-sm font-medium mb-1">Slug (URL)</label>
+          <input type="text" name="billing_plan_configuration[slug]" class="w-full border rounded px-3 py-2" value="<%= (@override[:slug] || @plan_details[:name])&.to_s&.parameterize %>">
+          <p class="mt-1 text-xs text-slate-500">Se vazio, geramos a partir do nome.</p>
+        </div>
+
+        <div>
           <label class="block text-sm font-medium mb-1">Preço (R$)</label>
           <input type="number" name="billing_plan_configuration[price]" class="w-full border rounded px-3 py-2" value="<%= @override[:price] || @plan_details[:price] %>">
         </div>

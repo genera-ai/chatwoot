@@ -1,5 +1,6 @@
 class SuperAdmin::AppConfigsController < SuperAdmin::ApplicationController
   before_action :set_config
+  before_action :redirect_billing_plan_configurations
   before_action :allowed_configs
   def show
     # ref: https://github.com/rubocop/rubocop/issues/7767
@@ -29,6 +30,10 @@ class SuperAdmin::AppConfigsController < SuperAdmin::ApplicationController
 
   def set_config
     @config = params[:config] || 'general'
+  end
+
+  def redirect_billing_plan_configurations
+    redirect_to super_admin_billing_plan_configurations_path if @config == 'billing_plan_configurations'
   end
 
   def allowed_configs

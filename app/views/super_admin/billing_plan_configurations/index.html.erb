@@ -158,13 +158,13 @@
 
               <!-- Ações -->
               <div class="flex space-x-2">
-                <%= link_to super_admin_billing_plan_configuration_path(plan_key), 
+                <%= link_to super_admin_billing_plan_configuration_path(plan_slug(plan_key)), 
                     class: "flex-1 inline-flex items-center justify-center px-4 py-2 border border-[rgb(var(--border-strong))] rounded-lg text-sm font-medium text-[rgb(var(--slate-11))] dark:text-[rgb(var(--slate-11))] bg-white dark:bg-[rgb(var(--slate-4))] hover:bg-[rgb(var(--slate-3))] hover:text-[rgb(var(--slate-12))] dark:hover:bg-[rgb(var(--slate-5))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--iris-8))] transition-colors" do %>
                   <i class="ri-eye-line mr-2"></i>
                   Ver Detalhes
                 <% end %>
                 
-                <%= link_to edit_super_admin_billing_plan_configuration_path(plan_key), 
+                <%= link_to edit_super_admin_billing_plan_configuration_path(plan_slug(plan_key)), 
                     class: "flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-[rgb(var(--iris-9))] hover:bg-[rgb(var(--iris-10))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--iris-8))] transition-colors" do %>
                   <i class="ri-edit-line mr-2"></i>
                   Editar

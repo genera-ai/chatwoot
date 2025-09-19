@@ -76,6 +76,14 @@ whatsapp:
   description: 'Manage your WhatsApp business interactions from Chatwoot.'
   enabled: true
   icon: 'icon-whatsapp-line'
+
+# ------- Billing / Plans ------- #
+billing_plan_configurations:
+  name: 'Assinaturas'
+  description: 'Gerencie os planos e limites disponíveis na instalação.'
+  enabled: true
+  icon: 'icon-apps-2-line'
+  config_key: 'billing_plan_configurations'
 telegram:
   name: 'Telegram'
   description: 'Manage your Telegram customer interactions from Chatwoot.'
